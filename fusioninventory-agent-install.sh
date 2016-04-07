@@ -18,3 +18,6 @@ ExecStart=/usr/local/bin/fusioninventory-agent
 [Install]
 WantedBy=multi-user.target
 EOF
+
+systemctl enable fusioninventory-agent
+systemctl start fusioninventory-agent
