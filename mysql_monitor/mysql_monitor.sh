@@ -1,10 +1,10 @@
 #!/bin/sh
 
-MYSQL="mysql -u$MYSQL_USER -p$MYSQL_PASSWD $MYOPTS"
-$mysql -Nrse"select 1" > /dev/null || { echo "no mysql access using $MYSQL" && exit 1; }
+mysql="mysql -u$MYSQL_USER -p$MYSQL_PASSWD $MYOPTS"
+$mysql -Nrse"select 1" > /dev/null || { echo "no mysql access using $mysql" && exit 1; }
 
 timeout=$TIME
-[ -z "$TIMEOUT" ] && { echo "no TIME env var" && exit 1; }
+[ -z "$timeout" ] && { echo "no TIME env var" && exit 1; }
 sleep=$(($timeout/2))
 
 check_sql() {
@@ -20,14 +20,14 @@ check_galera() {
 }
 
 start_service() {
-    echo 'start dropbear' "| supervisorctl -c /opt/supervisord.conf"
+    echo 'start dropbear' | supervisorctl -c /opt/supervisord.conf
 }
 
 stop_service() {
-    echo 'stop dropbear' "| supervisorctl -c /opt/supervisord.conf"
+    echo 'stop dropbear' | supervisorctl -c /opt/supervisord.conf
 }
 
-while sleep $SLEEP
+while sleep $sleep
 do
     lag=0
     state=0
