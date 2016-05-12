@@ -20,11 +20,11 @@ check_galera() {
 }
 
 start_service() {
-    echo 'start listen' | supervisorctl -c /opt/supervisord.conf
+    echo 'start listen' | supervisorctl -c /opt/supervisord.conf > /dev/null
 }
 
 stop_service() {
-    echo 'stop listen' | supervisorctl -c /opt/supervisord.conf
+    echo 'stop listen' | supervisorctl -c /opt/supervisord.conf > /dev/null
 }
 
 while sleep $sleep
