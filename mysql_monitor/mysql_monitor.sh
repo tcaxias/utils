@@ -38,7 +38,7 @@ while sleep $sleep
 do
     lag=0
     state=0
-    alve=$(check_sql)
+    alive=$(check_sql)
     slave=$(check_slave)
     if [ $alive -lt 0 ]; then
         echo "counldn't connect to DB"
