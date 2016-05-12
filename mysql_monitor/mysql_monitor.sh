@@ -19,7 +19,7 @@ check_slave() {
 }
 
 check_lag() {
-     echo $1 | sed -r -e 's|.*: *([^ ]+) *|\1|'
+    $mysql -e'show slave status\G' | grep Seconds | sed -r -e 's|.*: *([^ ]+) *|\1|'
 }
 
 check_galera() {
@@ -45,11 +45,11 @@ do
     elif [ "$slave" = "-1" ]; then
         state=$(check_galera)
     else
-        lag=$(check_lag $slave)
+        lag=$(check_lag)
         [ "NULL" = "$lag" ] && lag=$timeout
     fi
 
-    if [ $state -eq 4 ] || [ $state -eq 9 ] || [ $lag -le $timeout ]; then
+    if [ $state -eq 4 ] || [ $state -eq 9 ] || [ $lag -lt $timeout ]; then
         $(start_service)
     else
         $(stop_service)
