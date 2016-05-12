@@ -20,11 +20,11 @@ check_galera() {
 }
 
 start_service() {
-    echo 'start dropbear' | supervisorctl -c /opt/supervisord.conf
+    echo 'start listen' | supervisorctl -c /opt/supervisord.conf
 }
 
 stop_service() {
-    echo 'stop dropbear' | supervisorctl -c /opt/supervisord.conf
+    echo 'stop listen' | supervisorctl -c /opt/supervisord.conf
 }
 
 while sleep $sleep
