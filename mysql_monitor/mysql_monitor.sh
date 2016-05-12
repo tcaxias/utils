@@ -4,7 +4,7 @@
 [ -n "$MYSQL_PASSWD" ] && MYSQL_PASSWD=" -p$MYSQL_PASSWD"
 
 mysql="mysql $MYSQL_USER $MYSQL_PASSWD $MYOPTS"
-$mysql -Nrse"select 1" > /dev/null || { echo "no mysql access using $mysql" && exit 1; }
+$mysql -Nrse"select 1" > /dev/null || { echo "no mysql access using $mysql" && sleep 30s && exit 1; }
 
 timeout=$TIME
 [ -z "$timeout" ] && { echo "no TIME env var" && exit 1; }
