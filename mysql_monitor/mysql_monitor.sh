@@ -1,6 +1,9 @@
 #!/bin/sh
 
-mysql="mysql -u$MYSQL_USER -p$MYSQL_PASSWD $MYOPTS"
+[ -n "$MYSQL_USER" ] && MYSQL_USER=" -u $MYSQL_USER"
+[ -n "$MYSQL_PASSWD" ] && MYSQL_PASSWD=" -p$MYSQL_PASSWD"
+
+mysql="mysql $MYSQL_USER $MYSQL_PASSWD $MYOPTS"
 $mysql -Nrse"select 1" > /dev/null || { echo "no mysql access using $mysql" && exit 1; }
 
 timeout=$TIME
@@ -8,11 +11,15 @@ timeout=$TIME
 sleep=$(($timeout/2))
 
 check_sql() {
-    echo "select variable_value*1000 from information_schema.global_status where variable_name='SLAVE_HEARTBEAT_PERIOD'" | $mysql -Nrs || echo -1
+    echo "select 1" | $mysql -Nrs || echo -1
 }
 
 check_slave() {
-    $mysql -e'show slave status\G' | grep Seconds | sed -r -e 's|.*: *([^ ]+) *|\1|'
+    $mysql -e'show slave status\G' | grep Seconds || echo -1
+}
+
+check_lag() {
+     echo $1 | sed -r -e 's|.*: *([^ ]+) *|\1|'
 }
 
 check_galera() {
@@ -31,14 +38,15 @@ while sleep $sleep
 do
     lag=0
     state=0
-    slave=$(check_sql)
-    if [ $slave -lt 0 ]; then
+    alve=$(check_sql)
+    slave=$(check_slave)
+    if [ $alive -lt 0 ]; then
         echo "counldn't connect to DB"
-    elif [ $slave -gt 0 ]; then
-        lag=$(check_slave)
-        [ "NULL" = "$lag" ] && lag=$timeout
-    else
+    elif [ "$slave" = "-1" ]; then
         state=$(check_galera)
+    else
+        lag=$(check_lag $slave)
+        [ "NULL" = "$lag" ] && lag=$timeout
     fi
 
     if [ $state -eq 4 ] || [ $state -eq 9 ] || [ $lag -le $timeout ]; then
