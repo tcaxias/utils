@@ -8,7 +8,7 @@ $mysql -Nrse"select 1" > /dev/null || { echo "no mysql access using $mysql" && s
 
 timeout=$TIME
 [ -z "$timeout" ] && { echo "no TIME env var" && exit 1; }
-sleep=60
+sleep=30
 #sleep=$(($timeout/2))
 
 check_sql() {
