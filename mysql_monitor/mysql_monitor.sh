@@ -7,7 +7,7 @@ mysql="mysql $MYSQL_USER $MYSQL_PASSWD $MYOPTS"
 $mysql -Nrse"select 1" > /dev/null || { echo "no mysql access using $mysql" && sleep 30s && exit 1; }
 
 timeout=$TIME
-[ -z "$timeout" ] && { echo "no TIME env var" && exit 1; }
+[ -z "$timeout" ] && TIME=60
 sleep=30
 #sleep=$(($timeout/2))
 
@@ -28,11 +28,11 @@ check_galera() {
 }
 
 start_service() {
-    echo 'start listen' | supervisorctl -c /opt/supervisord.conf > /dev/null
+    echo 'start listen' | supervisorctl -c /usr/local/bin/supervisord.conf > /dev/null
 }
 
 stop_service() {
-    echo 'stop listen' | supervisorctl -c /opt/supervisord.conf > /dev/null
+    echo 'stop listen' | supervisorctl -c /usr/local/bin/supervisord.conf > /dev/null
 }
 
 while sleep $sleep
