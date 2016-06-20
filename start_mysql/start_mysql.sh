@@ -1,6 +1,7 @@
 #!/bin/sh
+# I read mysql_state as a
 
-[ -d /var/lib/mysql/mysql ] || \
+[ -f /var/lib/mysql/mysql/mysql.frm ] || \
     mysql_install_db
 
 mkdir -p \
