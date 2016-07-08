@@ -1,5 +1,4 @@
 #!/bin/sh
-# I read mysql_state as a
 
 [ -d /var/lib/mysql/mysql/ ] || \
     mysql_install_db
