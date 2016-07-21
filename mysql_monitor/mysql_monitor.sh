@@ -19,6 +19,10 @@ check_slave() {
     $mysql -e'show slave status\G' | grep Seconds || echo -1
 }
 
+check_tzs() {
+    echo "select count(1) from mysql.time_zone_name" | $mysql -Nrs || echo -1
+}
+
 check_lag() {
     $mysql -e'show slave status\G' | grep Seconds | sed -r -e 's|.*: *([^ ]+) *|\1|'
 }
@@ -51,7 +55,15 @@ do
     fi
 
     if [ "0$state" -eq 4 ] || [ "0$state" -eq 9 ] || [ "0$lag" -lt "0$timeout" ]; then
-        $(start_listen)
+        tzs=$(check_tzs)
+        if [ "0tsz" -lt 100 ]; then
+            $(load_tzs)
+        fi
+        if [ "0tsz" -gt 100 ]; then
+            $(start_listen)
+        else
+            $(stop_listen)
+        fi
     else
         $(stop_listen)
     fi
