@@ -20,7 +20,11 @@ check_slave() {
 }
 
 check_tzs() {
-    echo "select count(1) from mysql.time_zone_name" | $mysql -Nrs || echo -1
+    if [ "0$CHECK_TZ" -eq 0 ]; then
+        echo 10000
+    else
+        echo "select count(1) from mysql.time_zone_name" | $mysql -Nrs || echo -1
+    fi
 }
 
 check_lag() {
