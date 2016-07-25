@@ -70,7 +70,7 @@ do
         if [ "0$tsz" -lt $minimum_tzs ]; then
             $(load_tzs)
         fi
-        if [ "0$tsz" -gt $minimum_tzs ]; then
+        if [ "0$tsz" -ge $minimum_tzs ]; then
             $(start_listen)
         else
             $(stop_listen)
