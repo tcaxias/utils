@@ -67,10 +67,10 @@ do
 
     if [ "0$state" -eq 4 ] || [ "0$state" -eq 9 ] || [ "0$lag" -lt "0$timeout" ]; then
         tzs=$(check_tzs)
-        if [ "0tsz" -lt $minimum_tzs ]; then
+        if [ "0$tsz" -lt $minimum_tzs ]; then
             $(load_tzs)
         fi
-        if [ "0tsz" -gt $minimum_tzs ]; then
+        if [ "0$tsz" -gt $minimum_tzs ]; then
             $(start_listen)
         else
             $(stop_listen)
