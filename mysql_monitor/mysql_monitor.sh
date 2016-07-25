@@ -26,12 +26,12 @@ check_tzs() {
         echo 10000
     else
         tzs=$(echo "select count(1) from mysql.time_zone_name" | $mysql -Nrs)
-        if [ $tzs -eq 0 ]; then
-            mysql_tzinfo_to_sql /usr/share/zoneinfo | $mysql mysql
-        fi
-        tzs=$(echo "select count(1) from mysql.time_zone_name" | $mysql -Nrs)
         echo $tzs
     fi
+}
+
+load_tzs() {
+    mysql_tzinfo_to_sql /usr/share/zoneinfo | $mysql mysql
 }
 
 check_lag() {
