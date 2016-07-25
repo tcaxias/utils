@@ -28,8 +28,8 @@ check_tzs() {
         tzs=$(echo "select count(1) from mysql.time_zone_name" | $mysql -Nrs)
         if [ $tzs -eq 0 ]; then
             mysql_tzinfo_to_sql /usr/share/zoneinfo | $mysql mysql
+            tzs=$(echo "select count(1) from mysql.time_zone_name" | $mysql -Nrs)
         fi
-        tzs=$(echo "select count(1) from mysql.time_zone_name" | $mysql -Nrs)
         echo $tzs
     fi
 }
