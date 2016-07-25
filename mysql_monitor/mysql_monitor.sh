@@ -26,12 +26,12 @@ check_tzs() {
         echo 10000
     else
         tzs=$(echo "select count(1) from mysql.time_zone_name" | $mysql -Nrs)
+        if [ $tzs -eq 0 ]; then
+            mysql_tzinfo_to_sql /usr/share/zoneinfo | $mysql mysql
+        fi
+        tzs=$(echo "select count(1) from mysql.time_zone_name" | $mysql -Nrs)
         echo $tzs
     fi
-}
-
-load_tzs() {
-    mysql_tzinfo_to_sql /usr/share/zoneinfo | $mysql mysql
 }
 
 check_lag() {
@@ -67,10 +67,10 @@ do
 
     if [ "0$state" -eq 4 ] || [ "0$state" -eq 9 ] || [ "0$lag" -lt "0$timeout" ]; then
         tzs=$(check_tzs)
-        if [ "0$tsz" -lt $minimum_tzs ]; then
+        if [ "0$tzs" -lt $minimum_tzs ]; then
             $(load_tzs)
         fi
-        if [ "0$tsz" -ge $minimum_tzs ]; then
+        if [ "0$tzs" -ge $minimum_tzs ]; then
             $(start_listen)
         else
             $(stop_listen)
