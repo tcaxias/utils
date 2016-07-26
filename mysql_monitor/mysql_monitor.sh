@@ -27,7 +27,7 @@ check_tzs() {
     else
         tzs=$(echo "select count(1) from mysql.time_zone_name" | $mysql -Nrs)
         if [ $tzs -eq 0 ]; then
-            mysql_tzinfo_to_sql /usr/share/zoneinfo | $mysql mysql
+            mysql_tzinfo_to_sql /usr/share/zoneinfo | sed -i 's#TRUNCATE TABLE#DELETE FROM#g' | $mysql mysql
             tzs=$(echo "select count(1) from mysql.time_zone_name" | $mysql -Nrs)
         fi
         echo $tzs
