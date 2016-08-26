@@ -43,11 +43,11 @@ check_galera() {
 }
 
 start_listen() {
-    echo 'start listen' | supervisorctl -c /usr/local/bin/supervisord.conf > /dev/null
+    echo 'start listen' | supervisorctl -c /app/supervisord.conf > /dev/null
 }
 
 stop_listen() {
-    echo 'stop listen' | supervisorctl -c /usr/local/bin/supervisord.conf > /dev/null
+    echo 'stop listen' | supervisorctl -c /app/supervisord.conf > /dev/null
 }
 
 while sleep $sleep
