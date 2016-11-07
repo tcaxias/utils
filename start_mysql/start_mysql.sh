@@ -19,4 +19,4 @@ chown mysql.mysql -R \
     /var/run/mysqld \
     /run/mysqld
 
-exec mysqld --plugin-load=server_audit.so $@ > /dev/stderr
+exec mysqld --plugin-load=server_audit.so $@
