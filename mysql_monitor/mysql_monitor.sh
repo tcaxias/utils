@@ -50,6 +50,10 @@ stop_listen() {
     echo 'stop listen' | supervisorctl -c /app/supervisord.conf > /dev/null
 }
 
+set_ro() {
+    [ $RO_SLAVE ] && $mysql -e'set global read_only=1;'
+}
+
 while sleep $sleep
 do
     lag=0
@@ -67,7 +71,7 @@ do
 
     if [ "0$state" -eq 4 ] || [ "0$state" -eq 9 ] || [ "0$lag" -lt "0$timeout" ]; then
         tzs=$(check_tzs)
-        if [ "0$tzs" -ge $minimum_tzs ]; then
+        if [ "0$tzs" -ge $minimum_tzs ] && [ ! -f '/app/no_listen' ]; then
             $(start_listen)
         else
             $(stop_listen)
