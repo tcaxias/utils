@@ -7,7 +7,7 @@
 
 ##### How to run this:
 
-    python2 health.py [optional port number]
+    python health.py [optional port number]
 
 ##### Credits
 The idea for this completely based on an a post by Shlomi Noach, author of many great tools for mysql.
