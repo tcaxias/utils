@@ -1,5 +1,11 @@
 #!/bin/sh
 
+if [ "_$RECOVER_FROM" != '_' ] && [ ! -f '/var/lib/mysql/recovered_from' ]; then
+    rm -rf /var/lib/mysql/* /var/log/mysql/*
+    wget -O- $RECOVER_FROM | tar -zxC /var/lib/mysql/
+    echo $RECOVER_FROM > /var/lib/mysql/recovered_from
+fi
+
 tmpdir=$(grep tmpdir /etc/mysql/conf.d/*.cnf /etc/mysql/my.cnf | head -1 | sed -r -e 's#[^=]+=\s+(\S+)#\1#')
 [ -z tmpdir ] && tmpdir="/tmp"
 
